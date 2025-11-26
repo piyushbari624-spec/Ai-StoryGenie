@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>StoryGenie</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>StoryGenie ✨</h1>
+        <form id="story-form">
+            <input type="text" id="prompt" name="prompt" placeholder="Enter your story idea..." required>
+            <button type="submit">Generate Story</button>
+        </form>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        document.getElementById("story-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const prompt = document.getElementById("prompt").value;
+            document.getElementById("output").innerHTML = "<p>Generating story...</p>";
+
+            const response = await fetch("/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: `prompt=${encodeURIComponent(prompt)}`
+            });
+
+            const data = await response.json();
+            document.getElementById("output").innerHTML = `<pre>${data.story}</pre>`;
+        });
+    </script>
+</body>
+</html>
